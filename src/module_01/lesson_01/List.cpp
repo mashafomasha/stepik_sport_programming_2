@@ -1,6 +1,8 @@
 #include <iostream>
 #include "Node.cpp"
 
+using namespace std;
+
 class List {
     private:
         Node* start;
@@ -34,11 +36,22 @@ class List {
         void erase_after(int pos) {
         	Node* curr = this->start;
 
+        	if (pos == -1) {
+        		this->start = curr->get_next();
+        		delete curr;
+        		return;
+        	}
+
         	for (int i = 0; i < pos; ++i) {
         		curr = curr->get_next();
         	}
 
-        	delete curr;
+        	Node* node_to_erase = curr->get_next();
+        	Node* node__to_be_next = node_to_erase->get_next();
+
+        	curr->set_next(node__to_be_next);
+
+        	delete node_to_erase;
         }
 
         int get_at_pos(int pos) {
@@ -52,7 +65,14 @@ class List {
         }
 
         void print_contents() {
-        	std::cout << "CONTENT" << std::endl;
+        	Node* curr = this->start;
+
+        	while(curr) {
+        		cout << curr->get_val() << " ";
+        		curr = curr->get_next();
+        	}
+
+        	cout << endl;
         }
 
         ~List() {
